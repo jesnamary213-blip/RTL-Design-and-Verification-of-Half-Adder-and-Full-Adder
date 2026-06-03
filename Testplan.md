@@ -26,7 +26,8 @@ Test Scenarios
 | TC2       | 0 | 1 | 1            | 0              |
 | TC3       | 1 | 0 | 1            | 0              |
 | TC4       | 1 | 1 | 0            | 1              |
-Verification Method
+
+**Verification Method**
 Apply all input combinations.
 Compare DUT outputs against expected values.
 Use assertions to automatically detect mismatches.
