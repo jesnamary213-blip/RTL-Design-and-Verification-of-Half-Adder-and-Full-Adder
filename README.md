@@ -1,62 +1,156 @@
-# RTL-Design-and-Verification-of-Half-Adder
+# RTL Design and Verification of Half Adder and Full Adder
 
-This project implements a Half Adder in Verilog HDL and verifies it using a structured testbench. The goal was to go beyond basic simulation and follow a verification-oriented workflow including self-checking assertions, waveform analysis, and a written test plan — similar to how IP blocks are validated in a professional RTL flow.
+## Overview
 
-**Half Adder Logic**
-A Half Adder adds two single-bit inputs and produces a Sum and a Carry.
-Sum= A XOR B
-Carry= A AND B
+This project implements and verifies two fundamental digital arithmetic circuits — a Half Adder and a Full Adder — using Verilog HDL. The focus was not only on RTL design but also on building a structured verification environment with reusable testbenches, self-checking assertions, waveform analysis, and a documented test plan.
 
-**RTL Design**
-The design uses dataflow modeling with assign statements — straightforward and fully synthesizable.
-Design choices:
+The project was completed to gain hands-on experience with RTL development and verification concepts commonly used in digital design and VLSI verification workflows.
 
-- Dataflow style keeps the logic readable and maps directly to gate-level primitives
-- Modular structure allows the Half Adder to be instantiated inside a Full Adder later
+---
 
+## Design Description
 
-**Verification Approach**
-- The testbench was written with verification structure in mind, not just stimulus dumping.
-What's included:
+### Half Adder
 
-*DUT instantiation with clean port mapping*
-- Task-based stimulus generation so each test case is reusable and readable
-- A monitor block that continuously logs signal changes
-- VCD dump for GTKWave waveform inspection
-- Inline assertions that flag incorrect outputs automatically without manual waveform checking
+A Half Adder adds two single-bit inputs and produces a Sum and a Carry output.
 
-**Test Plan**
-All four input combinations were covered. Expected outputs were determined from the truth table before simulation was run.
+**Logic Equations**
 
+```text
+SUM   = A ^ B
+CARRY = A & B
+```
 
-**Assertion-Based Checking**
-- Rather than relying on visual waveform inspection, assertions were added directly in the testbench to catch output mismatches at simulation time.
-- Two properties were checked after each stimulus application:
+### Full Adder
 
-  assert(sum === (a ^ b)) — Sum correctness
-  assert(carry === (a & b)) — Carry correctness
+A Full Adder extends the Half Adder by including an additional Carry-in input.
 
-Any failure would print an error message with the input values, making debug faster.
+**Logic Equations**
 
-**Waveform Verification**
-Waveforms were dumped to a VCD file and viewed in GTKWave. This was used to:
+```text
+SUM   = A ^ B ^ Cin
+CARRY = (A & B) | (B & Cin) | (A & Cin)
+```
 
-- Visually confirm output transitions match the truth table
-- Check that there are no unintended glitches or X/Z states
-- Cross-verify the assertion results with actual signal behavior
+---
 
-**Tools**
+## RTL Design
 
-- Verilog HDL (RTL and testbench)
-- EDA Playground (simulation)
-- GTKWave (waveform viewing)
+Both circuits were implemented using Verilog dataflow modeling with continuous assignment statements.
 
+### Design Highlights
 
-*What I Learned*
+* Fully synthesizable RTL code
+* Direct implementation of arithmetic logic equations
+* Modular and reusable design approach
+* Half Adder used as a foundation for understanding larger arithmetic building blocks
+* Clean and readable coding style suitable for simulation and synthesis
 
-- How to write a testbench that checks itself rather than relying on manual inspection
-- How to structure a test plan before running simulation
-- How assertions catch bugs faster than waveform hunting
-- The basics of an IP block verification flow
+---
+
+## Verification Strategy
+
+The verification environment was designed to be self-checking rather than relying solely on manual waveform inspection.
+
+The testbenches include:
+
+* DUT instantiation with named port mapping
+* Task-based stimulus generation for reusable test cases
+* Continuous signal monitoring using `$monitor`
+* VCD waveform generation for GTKWave analysis
+* Inline assertions for automatic functional checking
+* Exhaustive testing of all possible input combinations
+
+---
+
+## Test Plan
+
+### Half Adder Test Cases
+
+| A | B |
+| - | - |
+| 0 | 0 |
+| 0 | 1 |
+| 1 | 0 |
+| 1 | 1 |
+
+All four possible input combinations were applied and verified.
+
+### Full Adder Test Cases
+
+| A | B | Cin |
+| - | - | --- |
+| 0 | 0 | 0   |
+| 0 | 0 | 1   |
+| 0 | 1 | 0   |
+| 0 | 1 | 1   |
+| 1 | 0 | 0   |
+| 1 | 0 | 1   |
+| 1 | 1 | 0   |
+| 1 | 1 | 1   |
+
+All eight possible input combinations were applied and verified.
+
+---
+
+## Assertion-Based Verification
+
+To make the testbenches self-checking, assertions were added to compare DUT outputs against the expected logic.
+
+### Half Adder Checks
+
+```verilog
+sum   == (A ^ B)
+carry == (A & B)
+```
+
+### Full Adder Checks
+
+```verilog
+sum   == (A ^ B ^ Cin)
+carry == ((A & B) | (B & Cin) | (A & Cin))
+```
+
+Any mismatch automatically generates an error message during simulation, making debugging faster and reducing dependence on manual waveform analysis.
+
+---
+
+## Waveform Analysis
+
+Simulation waveforms were dumped to VCD files and viewed using GTKWave.
+
+Waveform inspection was used to:
+
+* Verify output transitions for all test cases
+* Confirm the correctness of Sum and Carry generation
+* Cross-check assertion results
+* Identify any unexpected X or Z states
+* Validate functional behavior throughout the simulation
+
+---
+
+---
+
+## Tools Used
+
+* Verilog HDL
+* EDA Playground
+* GTKWave
+
+---
+
+## Key Learnings
+
+Through this project, I gained practical experience in:
+
+* RTL design using Verilog HDL
+* Designing reusable and structured testbenches
+* Assertion-based verification techniques
+* Creating verification test plans
+* Functional validation through exhaustive testing
+* Waveform debugging and analysis
+* Understanding the relationship between design and verification in a typical RTL development flow
+
+This project strengthened my understanding of fundamental digital design concepts while providing hands-on exposure to verification practices used for validating RTL blocks before system-level integration.
 
 
