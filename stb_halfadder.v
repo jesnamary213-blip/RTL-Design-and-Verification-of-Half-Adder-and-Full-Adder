@@ -3,10 +3,10 @@ module half_adder_stb;
   wire sum,carry;
   
   Half Adder uut(
-    .A(A)
-    .B(B)
-    .sum(sum)
-    .carry(carry)
+    .A(A),
+    .B(B),
+    .sum(sum),
+    .carry(carry),
     
   );
   
@@ -15,7 +15,7 @@ module half_adder_stb;
   always @(*) begin
     if(sum!=(A^B))
       $display("error",$time);
-    if(carry!=A&B)
+    if(carry!=(A&B))
       $display("error",$time);
   end
   
@@ -28,17 +28,17 @@ module half_adder_stb;
     A=a;
     B=b;
     #10
-  end
+    endtask
     
   //waveform
     
   intial begin
-    $dump("Half_Adder.vcd");
-    $dumpvar(0,half_adder_stb);
+    $dumpfile("Half_Adder.vcd");
+    $dumpvars(0,half_adder_stb);
   end
     
   initial begin
-    $monitor("A=%b,B=%b,C=%b,D=%b,A,B,sum,carry);
+    $monitor("A=%b B=%b C=%b D=%b",A,B,sum,carry);
      apply_inputs(0,0);
      apply_inputs(0,1);
      apply_inputs(1,0);       
